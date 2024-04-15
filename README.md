@@ -4,7 +4,9 @@
 
  A geração de energia hidrelétrica é fundamental para o Brasil, respondendo por mais de 60%
  da matriz energética nacional. A precipitação de chuva é um fator crucial na determinação da
- vazão dos rios e, consequentemente, na geração de energia
+ vazão dos rios e, consequentemente, na geração de energia. 
+
+ Dado esse contexto, resolve-se o presente desafio para a disciplina de GED-20 (Análise preditiva de dados em negócios), da graduação no ITA (Instituto Tecnológico de Aeronáutica).
 
  ## Objetivo
 
