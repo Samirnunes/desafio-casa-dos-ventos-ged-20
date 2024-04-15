@@ -40,7 +40,7 @@ def plot_plant_ts_mean_by_month(ts_dict, plant="PSATCNV"):
     df = df.resample('M').sum()
     df = df.groupby(df.index.month).mean()
     plt.bar(df.index, df["mean_precipitation"], color="darkblue")
-    plt.xticks([i+1 for i in range(len(df.index))], list(df.index), rotation=45)
+    plt.xticks([i+1 for i in range(len(df.index))], list(df.index))
     plt.title(f"Média das precipitações acumuladas por mês para {plant} ao longo dos anos")
     plt.xlabel("Data de referência")
     plt.show()
