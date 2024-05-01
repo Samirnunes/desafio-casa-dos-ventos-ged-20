@@ -9,9 +9,9 @@ def plot_plant_ts_daily(ts_dict, plant="PSATCNV", close=True):
     plt.figure(figsize=(8, 6))
     ts_dict[plant].plot()
     plt.title(f"Precipitação média diária para {plant}")
-    folder_path = f"figs-{plant}/"
+    folder_path = f"../images/figs-{plant}/"
     if not os.path.exists(folder_path):
-        os.mkdir(folder_path)
+        os.makedirs(folder_path)
     save_path = f"{folder_path}daily_mean.png"
     plt.savefig(save_path)
     if close:
@@ -28,9 +28,9 @@ def plot_plant_ts_accumulated_by_month(ts_dict, plant="PSATCNV", close=True):
     df.plot(color="darkblue", legend=False)
     plt.title(f"Precipitação média acumulada por mês para {plant}")
     plt.xlabel("Data de referência")
-    folder_path = f"figs-{plant}/"
+    folder_path = f"../images/figs-{plant}/"
     if not os.path.exists(folder_path):
-        os.mkdir(folder_path)
+        os.makedirs(folder_path)
     save_path = f"{folder_path}accumulated_by_month.png"
     plt.savefig(save_path)
     if close:
@@ -49,9 +49,9 @@ def plot_plant_ts_accumulated_by_year(ts_dict, plant="PSATCNV", close=True):
     plt.title(f"Precipitação média acumulada por ano para {plant}")
     plt.xlabel("Data de referência")
     plt.grid()
-    folder_path = f"figs-{plant}/"
+    folder_path = f"../images/figs-{plant}/"
     if not os.path.exists(folder_path):
-        os.mkdir(folder_path)
+        os.makedirs(folder_path)
     save_path = f"{folder_path}accumulated_by_year.png"
     plt.savefig(save_path)
     if close:
@@ -70,9 +70,9 @@ def plot_plant_ts_mean_by_month(ts_dict, plant="PSATCNV", close=True):
     plt.xticks([i+1 for i in range(len(df.index))], list(df.index))
     plt.title(f"Média das precipitações acumuladas por mês para {plant} ao longo dos anos")
     plt.xlabel("Data de referência", fontsize=12)
-    folder_path = f"figs-{plant}/"
+    folder_path = f"../images/figs-{plant}/"
     if not os.path.exists(folder_path):
-        os.mkdir(folder_path)
+        os.makedirs(folder_path)
     save_path = f"{folder_path}mean-by-month.png"
     plt.savefig(save_path)
     if close:
@@ -96,9 +96,9 @@ def precipitation_plots(ts_dict, plant="PSATCNV"):
     axs[1, 1].imshow(img3)
     for ax in axs.flatten():
         ax.axis("off")
-    folder_path = f"figs-{plant}/"
+    folder_path = f"../images/figs-{plant}/"
     if not os.path.exists(folder_path):
-        os.mkdir(folder_path)
+        os.makedirs(folder_path)
     save_path = f"{folder_path}all.png"
     plt.savefig(save_path, bbox_inches='tight', pad_inches=0)
     plt.show()
