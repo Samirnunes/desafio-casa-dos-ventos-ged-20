@@ -1,10 +1,12 @@
-import pandas as pd
-import matplotlib.pyplot as plt
 import os
+
+import matplotlib.pyplot as plt
+import pandas as pd
 from PIL import Image
 
+
 def plot_plant_ts_daily(ts_dict, plant="PSATCNV", close=True):
-    plt.figure(figsize=(8,6))
+    plt.figure(figsize=(8, 6))
     ts_dict[plant].plot()
     plt.title(f"Precipitação média diária para {plant}")
     folder_path = f"figs-{plant}/"
@@ -15,7 +17,8 @@ def plot_plant_ts_daily(ts_dict, plant="PSATCNV", close=True):
     if close:
         plt.close()
     return save_path
-       
+
+
 def plot_plant_ts_accumulated_by_month(ts_dict, plant="PSATCNV", close=True):
     plt.figure(figsize=(8, 6))
     ts = ts_dict[plant]
@@ -33,9 +36,10 @@ def plot_plant_ts_accumulated_by_month(ts_dict, plant="PSATCNV", close=True):
     if close:
         plt.close()
     return save_path
-    
+
+
 def plot_plant_ts_accumulated_by_year(ts_dict, plant="PSATCNV", close=True):
-    plt.figure(figsize=(8,6))
+    plt.figure(figsize=(8, 6))
     ts = ts_dict[plant]
     df = ts.copy()
     df.index = pd.to_datetime(df.index)
@@ -53,9 +57,10 @@ def plot_plant_ts_accumulated_by_year(ts_dict, plant="PSATCNV", close=True):
     if close:
         plt.close()
     return save_path
-    
+
+
 def plot_plant_ts_mean_by_month(ts_dict, plant="PSATCNV", close=True):
-    plt.figure(figsize=(8,6))
+    plt.figure(figsize=(8, 6))
     ts = ts_dict[plant]
     df = ts.copy()
     df.index = pd.to_datetime(df.index)
@@ -74,13 +79,14 @@ def plot_plant_ts_mean_by_month(ts_dict, plant="PSATCNV", close=True):
         plt.close()
     return save_path
 
+
 def precipitation_plots(ts_dict, plant="PSATCNV"):
     save_path0 = plot_plant_ts_daily(ts_dict, plant)
     save_path1 = plot_plant_ts_accumulated_by_month(ts_dict, plant)
     save_path2 = plot_plant_ts_accumulated_by_year(ts_dict, plant)
     save_path3 = plot_plant_ts_mean_by_month(ts_dict, plant)
-    fig, axs= plt.subplots(2, 2, figsize=(20, 18))
-    img0 = Image.open(save_path0) 
+    _, axs = plt.subplots(2, 2, figsize=(20, 18))
+    img0 = Image.open(save_path0)
     img1 = Image.open(save_path1)
     img2 = Image.open(save_path2)
     img3 = Image.open(save_path3)

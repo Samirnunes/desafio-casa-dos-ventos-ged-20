@@ -1,5 +1,6 @@
 import pandas as pd
 
+
 def separate_plants_ts():
     merge = pd.read_csv("../data/merge.csv")
     for code in merge["ana_code"].unique():
@@ -9,9 +10,11 @@ def separate_plants_ts():
         ts = ts.drop(["date_ref", "ana_code"], axis=1)
         ts.to_csv(path)
 
+
 def get_plants():
     df = pd.read_csv("../data/merge.csv")
-    return  df["ana_code"].unique()
+    return df["ana_code"].unique()
+
 
 def import_precipitation_ts():
     df_dict = {}
