@@ -1,4 +1,5 @@
 import pandas as pd
+from sklearn.model_selection import train_test_split
 
 
 def separate_plants_ts():
@@ -45,3 +46,35 @@ def separate_predictions_plants_ts(name: str):
         code_df = transformed_df[transformed_df["ana_code"] == code].drop(columns='ana_code')
         merged = pd.merge(code_df, ts, on='date_ref', how='inner')
         merged.to_csv(path, index=False)
+
+
+def create_new_features(ts_dict: dict):
+    for key, df in ts_dict.items():
+
+        # Calculando as datas anteriores e os valores correspondentes
+        for i in range(1, 16):
+            df[f'-{i}d'] = df['mean_precipitation'].shift(i)
+
+        ts_dict[key] = df
+        df['mean_last_15d'] = df['mean_precipitation'].rolling(window=15).sum()
+        df['mean_last_30d'] = df['mean_precipitation'].rolling(window=30).sum()
+
+
+def split_train_test(ts_dict: dict):
+    X_train_dict = {}
+    X_test_dict = {}
+    y_train_dict = {}
+    y_test_dict = {}
+
+    for key, df in ts_dict.items():
+        X = df.drop(columns=['mean_precipitation'])
+        y = df['mean_precipitation']
+
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=25)
+
+        X_train_dict[key] = X_train
+        X_test_dict[key] = X_test
+        y_train_dict[key] = y_train
+        y_test_dict[key] = y_test
+
+    return X_train_dict, X_test_dict, y_train_dict, y_test_dict
