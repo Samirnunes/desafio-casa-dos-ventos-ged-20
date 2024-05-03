@@ -1,5 +1,6 @@
 import pandas as pd
 from sklearn.model_selection import train_test_split
+import math
 
 
 def separate_plants_ts():
@@ -67,10 +68,16 @@ def split_train_test(ts_dict: dict):
     y_test_dict = {}
 
     for key, df in ts_dict.items():
+        train_size = math.ceil(len(ts_dict[key])*0.98)
+
         X = df.drop(columns=['mean_precipitation'])
         y = df['mean_precipitation']
 
-        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=25)
+        X_train = X[:train_size]
+        X_test = X[train_size:]
+
+        y_train = X[:train_size]
+        y_test = y[train_size:]
 
         X_train_dict[key] = X_train
         X_test_dict[key] = X_test
