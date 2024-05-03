@@ -52,7 +52,6 @@ def separate_predictions_plants_ts(name: str):
 def create_new_features(ts_dict: dict):
     for key, df in ts_dict.items():
 
-        # Calculando as datas anteriores e os valores correspondentes
         for i in range(1, 16):
             df[f'-{i}d'] = df['mean_precipitation'].shift(i)
 
