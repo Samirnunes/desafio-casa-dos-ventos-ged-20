@@ -53,6 +53,11 @@ def create_new_features(ts_dict: dict):
         ts_dict[key] = df
         df['mean_last_30d'] = df['mean_precipitation'].rolling(window=30).sum()
         df['mean_last_60d'] = df['mean_precipitation'].rolling(window=60).sum()
+        df.index = pd.to_datetime(df.index)
+        months = df.index.month
+        dummies = pd.get_dummies(months, prefix="m", drop_first=True)
+        dummies.index = df.index
+        df = pd.concat([df, dummies], axis=1)
 
         path = f"../data/ts-{key}.csv"
         df.to_csv(path)
