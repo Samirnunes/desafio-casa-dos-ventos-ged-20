@@ -1,5 +1,4 @@
 import pandas as pd
-import math
 
 
 def separate_plants_ts():
@@ -11,18 +10,15 @@ def separate_plants_ts():
         ts = ts.drop(["date_ref", "ana_code"], axis=1)
         ts.to_csv(path)
 
-
 def get_plants():
     df = pd.read_csv("../data/merge.csv")
     return df["ana_code"].unique()
-
 
 def import_precipitation_ts():
     df_dict = {}
     for plant in get_plants():
         df_dict[plant] = pd.read_csv(f"../data/ts-{plant}.csv", index_col=0)
     return df_dict
-
 
 def separate_predictions_plants_ts(name: str):
     df = pd.read_csv(f"../data/{name}.csv")
@@ -44,7 +40,6 @@ def separate_predictions_plants_ts(name: str):
         code_df = transformed_df[transformed_df["ana_code"] == code].drop(columns='ana_code')
         code_df.to_csv(path, index=False)
 
-
 def create_new_features(ts_dict: dict):
     for key, df in ts_dict.items():
         for i in range(1, 46):
@@ -61,29 +56,3 @@ def create_new_features(ts_dict: dict):
 
         path = f"../data/ts-{key}.csv"
         df.to_csv(path)
-
-
-def split_train_test(ts_dict: dict):
-    X_train_dict = {}
-    X_test_dict = {}
-    y_train_dict = {}
-    y_test_dict = {}
-
-    for key, df in ts_dict.items():
-        train_size = math.ceil(len(ts_dict[key])*0.98)
-
-        X = df.drop(columns=['mean_precipitation'])
-        y = df['mean_precipitation']
-
-        X_train = X[:train_size]
-        X_test = X[train_size:]
-
-        y_train = X[:train_size]
-        y_test = y[train_size:]
-
-        X_train_dict[key] = X_train
-        X_test_dict[key] = X_test
-        y_train_dict[key] = y_train
-        y_test_dict[key] = y_test
-
-    return X_train_dict, X_test_dict, y_train_dict, y_test_dict
