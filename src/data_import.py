@@ -1,8 +1,10 @@
 import pandas as pd
 
+
 def get_plants():
     df = pd.read_csv("../data/merge.csv")
     return df["ana_code"].unique()
+
 
 def import_precipitation_ts():
     ts_dict = {}
@@ -14,6 +16,7 @@ def get_dataset_only_time(plant="PSATJIRA"):
     ts_dict = import_precipitation_ts()
     return ts_dict[plant].dropna(axis=0)
 
+
 def get_dataset_with_cfs_gefs(plant="PSATJIRA"):
     df = get_dataset_only_time(plant)
     dfcg = df.copy()
@@ -22,7 +25,8 @@ def get_dataset_with_cfs_gefs(plant="PSATJIRA"):
     dfcg = pd.concat([dfcg, c], axis=1).dropna(axis=0)
     dfcg = pd.concat([dfcg, g], axis=1).dropna(axis=0)
     return dfcg
-    
+
+
 def separate_predictions_plants_ts(name: str):
     df = pd.read_csv(f"../data/{name}.csv")
     df['date_ref'] = pd.to_datetime(df['date_ref'])
@@ -42,6 +46,7 @@ def separate_predictions_plants_ts(name: str):
         path = f"../data/ts-{code}-{name}-model.csv"
         code_df = transformed_df[transformed_df["ana_code"] == code].drop(columns='ana_code')
         code_df.to_csv(path, index=False)
+
 
 def create_new_features(ts_dict: dict):
     for key, df in ts_dict.items():

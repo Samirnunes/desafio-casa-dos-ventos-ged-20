@@ -8,6 +8,7 @@ from statsmodels.graphics.tsaplots import plot_acf, plot_pacf
 from tabulate import tabulate
 from PIL import Image
 
+
 def plot_plant_ts_daily(ts_dict, plant="PSATCNV", close=True):
     plt.figure(figsize=(8, 6))
     ts_dict[plant]["mean_precipitation"].plot()
@@ -27,7 +28,7 @@ def plot_plant_ts_accumulated_by_month(ts_dict, plant="PSATCNV", close=True):
     ts = ts_dict[plant]["mean_precipitation"]
     df = ts.copy()
     df.index = pd.to_datetime(df.index)
-    df = df.resample('M').sum()
+    df = df.resample('ME').sum()
     df.plot(color="darkblue", legend=False)
     plt.title(f"Precipitação média acumulada por mês para {plant}")
     plt.xlabel("Data de referência")
@@ -47,7 +48,7 @@ def plot_plant_ts_accumulated_by_year(ts_dict, plant="PSATCNV", close=True):
     df = ts.copy()
     df.index = pd.to_datetime(df.index)
     df = df[df.index < "2024-01-01"]
-    df = df.resample('Y').sum()
+    df = df.resample('YE').sum()
     df.plot(color="darkblue", legend=False)
     plt.title(f"Precipitação média acumulada por ano para {plant}")
     plt.xlabel("Data de referência")
@@ -67,7 +68,7 @@ def plot_plant_ts_mean_by_month(ts_dict, plant="PSATCNV", close=True):
     ts = ts_dict[plant]["mean_precipitation"]
     df = ts.copy()
     df.index = pd.to_datetime(df.index)
-    df = df.resample('M').sum()
+    df = df.resample('ME').sum()
     df = df.groupby(df.index.month).mean()
     plt.bar(df.index, df, color="darkblue")
     plt.xticks([i+1 for i in range(len(df.index))], list(df.index))
@@ -104,6 +105,7 @@ def precipitation_plots(ts_dict, plant="PSATCNV"):
         os.makedirs(folder_path)
     save_path = f"{folder_path}all.png"
     plt.savefig(save_path, bbox_inches='tight', pad_inches=0)
+    plt.tight_layout()
     plt.show()
 
 def is_stationary(ts_dict, plant="PSATCNV"):
