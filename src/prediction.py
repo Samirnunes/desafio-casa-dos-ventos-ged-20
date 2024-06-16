@@ -6,7 +6,6 @@ from sklearn.metrics import mean_squared_error
 from sklearn import clone
 import numpy as np
 import matplotlib.pyplot as plt
-from tqdm import tqdm
 
 def cross_validation(model, X, y):
     tscv = TimeSeriesSplit(n_splits=10)
@@ -25,6 +24,7 @@ def cross_validation(model, X, y):
         print(f"RMSE: {rmse_val}\n")
         rmse.append(rmse_val)
         eval_count += 1
+    print(f"Mean rmse: {sum(rmse)/len(rmse)}")
     fig, axs = plt.subplots(1, 2)
     axs[0].hist(rmse)
     axs[0].set_title("RMSE histogram")
@@ -37,7 +37,6 @@ def cross_validation(model, X, y):
     axs[1].set_title("Last iteration plot")
     axs[1].legend(["y_true", "y_pred"])
     plt.show()
-    print(f"Mean rmse: {sum(rmse)/len(rmse)}")
 
 def split_train_test_by_size(df: pd.DataFrame, test_size=50):
     train_index = len(df) - test_size
