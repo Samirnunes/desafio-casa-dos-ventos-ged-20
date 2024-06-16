@@ -18,6 +18,7 @@ def cross_validation(model, X, y):
         model_ = clone(model)
         X_train, X_val = X.iloc[train_index], X.iloc[val_index]
         y_train, y_val = y.iloc[train_index], y.iloc[val_index]
+        X_train, X_val = preprocess(X_train, X_val)
         model_.fit(X_train, y_train)
         y_pred = pd.DataFrame(model_.predict(X_val), index=y_val.index)[0]
         rmse_val = np.sqrt(mean_squared_error(y_val, y_pred))
@@ -71,13 +72,4 @@ def preprocess(X_train, X_test):
     X_train = pd.DataFrame(scaler.transform(X_train), columns=X_train.columns, index=X_train.index)
     X_test = pd.DataFrame(scaler.transform(X_test), columns=X_test.columns, index=X_test.index)
     return X_train, X_test
-
-def evaluate(model, X_val, y_val):
-    y_pred = pd.DataFrame(model.predict(X_val), index=y_val.index)[0]
-    print(f"Root Mean Squared Error: {np.sqrt(mean_squared_error(y_val, y_pred))}")
-    y_val.plot()
-    y_pred.plot()
-    plt.legend(["validation", "prediction on validation"])
-    plt.xticks(rotation=45)
-    plt.show()
     
