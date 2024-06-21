@@ -3,9 +3,10 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
+from tabulate import tabulate
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import TimeSeriesSplit
-from sklearn.metrics import mean_squared_error
+from sklearn.metrics import mean_squared_error, mean_absolute_error
 from sklearn import clone
 
 
@@ -13,27 +14,45 @@ def cross_validation(model, X, y):
     tscv = TimeSeriesSplit(n_splits=10)
     rmse_val_list = []
     rmse_train_list = []
+    mae_val_list = []
+    mae_train_list = []
     eval_count = 0
     for train_index, val_index in tscv.split(X):
         print(f"Evaluation {eval_count}:")
-        print(f"Train size: {len(train_index)}")
-        print(f"Val size: {len(val_index)}")
         model_ = clone(model)
         X_train, X_val = X.iloc[train_index], X.iloc[val_index]
         y_train, y_val = y.iloc[train_index], y.iloc[val_index]
         X_train, X_val = preprocess(X_train, X_val)
         model_.fit(X_train, y_train)
         y_pred = pd.DataFrame(model_.predict(X_val), index=y_val.index)[0]
+
         rmse_val = np.sqrt(mean_squared_error(y_val, y_pred))
-        print(f"RMSE val: {rmse_val:0.2f}")
         rmse_val_list.append(rmse_val)
         rmse_train = np.sqrt(mean_squared_error(y_train, model_.predict(X_train)))
-        print(f"RMSE train: {rmse_train:0.2f}\n")
         rmse_train_list.append(rmse_train)
+
+        mae_val = mean_absolute_error(y_val, y_pred)
+        mae_val_list.append(mae_val)
+        mae_train = mean_absolute_error(y_train, model_.predict(X_train))
+        mae_train_list.append(mae_train)
+        data = [
+            ["Train", f"{len(train_index)}", f"{rmse_train:0.2f}", f"{mae_train:0.2f}"],
+            ["Validation", f"{len(val_index)}", f"{rmse_val:0.2f}", f"{mae_val:0.2f}"],
+        ]
+        headers = ["", "Size", "RMSE", "MAE"]
+        print(tabulate(data, headers=headers, tablefmt="pretty"), end="\n\n")
         eval_count += 1
 
-    print(f"Mean RMSE on validation: {sum(rmse_val_list)/len(rmse_val_list):0.2f}")
-    print(f"Mean RMSE on train: {sum(rmse_train_list)/len(rmse_train_list):0.2f}")
+    data = [
+            ["Train",
+             f"{sum(rmse_train_list)/len(rmse_train_list):0.2f}",
+             f"{sum(mae_train_list)/len(mae_train_list):0.2f}"],
+            ["Validation",
+             f"{sum(rmse_val_list)/len(rmse_val_list):0.2f}",
+             f"{sum(mae_val_list)/len(mae_val_list):0.2f}"],
+        ]
+    headers = ["", "Mean RMSE", "Mean MAE"]
+    print(tabulate(data, headers=headers, tablefmt="pretty"), end="\n\n")
 
     _, (ax1, ax2) = plt.subplots(2, 1, figsize=(12, 6), height_ratios=[0.4, 0.6])
     ax1.hist(rmse_val_list)
@@ -59,7 +78,8 @@ def test(model, X_train, X_test, y_train, y_test):
     X_train_, X_test_ = preprocess(X_train_, X_test_)
     model_.fit(X_train_, y_train)
     y_pred = model_.predict(X_test_)
-    print(f"Test RMSE: {np.sqrt(mean_squared_error(y_test, y_pred))}")
+    print(f"Test RMSE: {np.sqrt(mean_squared_error(y_test, y_pred)):0.2f}")
+    print(f"Test  MAE: {mean_absolute_error(y_test, y_pred):0.2f}")
 
 
 def preprocess(X_train, X_test):
