@@ -106,7 +106,6 @@ def precipitation_plots(ts_dict, plant="PSATCNV"):
     plt.savefig(save_path, bbox_inches='tight', pad_inches=0)
     plt.show()
 
-
 def is_stationary(ts_dict, plant="PSATCNV"):
     ts = ts_dict[plant]
     df = ts.copy()

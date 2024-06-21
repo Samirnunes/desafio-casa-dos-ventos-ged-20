@@ -5,11 +5,24 @@ def get_plants():
     return df["ana_code"].unique()
 
 def import_precipitation_ts():
-    df_dict = {}
+    ts_dict = {}
     for plant in get_plants():
-        df_dict[plant] = pd.read_csv(f"../data/ts-{plant}.csv", index_col=0)
-    return df_dict
+        ts_dict[plant] = pd.read_csv(f"../data/ts-{plant}.csv", index_col=0)
+    return ts_dict
 
+def get_dataset_only_time(plant="PSATJIRA"):
+    ts_dict = import_precipitation_ts()
+    return ts_dict[plant].dropna(axis=0)
+
+def get_dataset_with_cfs_gefs(plant="PSATJIRA"):
+    df = get_dataset_only_time(plant)
+    dfcg = df.copy()
+    c = pd.read_csv("../data/ts-PSATJIRA-cfs-model.csv", index_col=[0])
+    g = pd.read_csv("../data/ts-PSATJIRA-gefs-model.csv", index_col=[0])
+    dfcg = pd.concat([dfcg, c], axis=1).dropna(axis=0)
+    dfcg = pd.concat([dfcg, g], axis=1).dropna(axis=0)
+    return dfcg
+    
 def separate_predictions_plants_ts(name: str):
     df = pd.read_csv(f"../data/{name}.csv")
     df['date_ref'] = pd.to_datetime(df['date_ref'])
