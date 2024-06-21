@@ -42,20 +42,3 @@ def separate_predictions_plants_ts(name: str):
         path = f"../data/ts-{code}-{name}-model.csv"
         code_df = transformed_df[transformed_df["ana_code"] == code].drop(columns='ana_code')
         code_df.to_csv(path, index=False)
-
-def create_new_features(ts_dict: dict):
-    for key, df in ts_dict.items():
-        for i in range(1, 46):
-            df[f'lag_{i}'] = df['mean_precipitation'].shift(i)
-
-        ts_dict[key] = df
-        df['mean_last_30d'] = df['mean_precipitation'].rolling(window=30).sum()
-        df['mean_last_60d'] = df['mean_precipitation'].rolling(window=60).sum()
-        df.index = pd.to_datetime(df.index)
-        months = df.index.month
-        dummies = pd.get_dummies(months, prefix="m", drop_first=True)
-        dummies.index = df.index
-        df = pd.concat([df, dummies], axis=1)
-
-        path = f"../data/ts-{key}.csv"
-        df.to_csv(path)
