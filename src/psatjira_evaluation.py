@@ -6,7 +6,7 @@ from precipitation_model_evaluator import PrecipitationEvaluator
 
 def psatjira_evaluation():
     plant = "PSATJIRA"
-    root_path = "./evaluation_results/PSATJIRA/"
+    root_path = "../evaluation_results/PSATJIRA/"
     
     evaluators = []
     for model in psatjira_models:

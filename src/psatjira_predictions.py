@@ -7,7 +7,7 @@ def psatjira_predictions_cfs_gefs():
     for model, name in zip(psatjira_models, psatjira_models_names):
         predictor = NextDaysPrecipitationPredictor(model, "PSATJIRA")
         predictions = predictor.predict_next_x_days(15, True)
-        save_path = f"./prediction_results/{name}_cfs_gefs/"
+        save_path = f"../prediction_results/{name}_cfs_gefs/"
         if not os.path.isdir(save_path):
             os.makedirs(save_path)
         plt.plot(predictions.index, predictions)
@@ -27,7 +27,7 @@ def psatjira_predictions_time():
     for model, name in zip(psatjira_models, psatjira_models_names):
         predictor = NextDaysPrecipitationPredictor(model, "PSATJIRA")
         predictions = predictor.predict_next_x_days(15, False)
-        save_path = f"./prediction_results/{name}_time/"
+        save_path = f"../prediction_results/{name}_time/"
         if not os.path.isdir(save_path):
             os.makedirs(save_path)
         plt.plot(predictions.index, predictions)
