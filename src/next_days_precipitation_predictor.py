@@ -1,18 +1,20 @@
 import pandas as pd
-from data_import import *
+from sklearn.base import clone
+
+from data_import import get_dataset_only_time, get_dataset_with_cfs_gefs
 from create_features import create_new_features_by_df
 from precipitation_preprocessor import PrecipitationPreprocessor
-from sklearn.base import clone
+
 
 class NextDaysPrecipitationPredictor:
     def __init__(self, model, plant="PSATJIRA"):
         self.__model = clone(model)
         self.__plant = plant
-        
+
     def predict_next_x_days(self, x=15, use_cfs_gefs=False):
         if use_cfs_gefs:
             df_train = get_dataset_with_cfs_gefs(self.__plant)
-        else:    
+        else:
             df_train = get_dataset_only_time(self.__plant)
         X_train = df_train.drop(["mean_precipitation"], axis=1)
         y_train = df_train["mean_precipitation"]
@@ -36,7 +38,7 @@ class NextDaysPrecipitationPredictor:
             df['mean_last_30d'] = df['mean_precipitation'].rolling(window=30, closed="left").sum()
             df['mean_last_60d'] = df['mean_precipitation'].rolling(window=60, closed="left").sum()
         return df_next_x["mean_precipitation"]
-    
+
     def __append_next_x_days_cfs_gefs(self, x=15):
         df = get_dataset_with_cfs_gefs(self.__plant)[["mean_precipitation"]]
         last_date = df.index[-1]
@@ -57,7 +59,7 @@ class NextDaysPrecipitationPredictor:
         df = get_dataset_only_time(self.__plant)[["mean_precipitation"]]
         last_date = df.index[-1]
         next_x_days = pd.date_range(start=last_date, periods=x+1, inclusive="neither")
-        new_index = pd.to_datetime(list(next_x_days)).date        
+        new_index = pd.to_datetime(list(next_x_days)).date
         df_x_days = pd.DataFrame(index=new_index, columns=df.columns)
         df_new = pd.concat([df, df_x_days], axis=0)
         df_new = create_new_features_by_df(df_new)
