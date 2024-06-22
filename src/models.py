@@ -1,5 +1,6 @@
 from sklearn.neighbors import KNeighborsRegressor
 from sklearn.ensemble import RandomForestRegressor
+from xgboost import XGBRegressor
 
 psatjira_models = [
     KNeighborsRegressor(n_neighbors=10),
@@ -9,4 +10,12 @@ psatjira_models = [
 psatjira_models_names = [
     "10nn",
     "random_forest"
+]
+
+psatitp_models = [
+    XGBRegressor(learning_rate=0.1, max_depth=3, subsample=0.8)
+]
+
+psatitp_models_names = [
+    "xgb_15d"
 ]

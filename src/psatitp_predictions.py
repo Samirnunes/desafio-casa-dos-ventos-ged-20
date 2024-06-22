@@ -3,14 +3,14 @@ import os
 import matplotlib.pyplot as plt
 
 from next_days_precipitation_predictor import NextDaysPrecipitationPredictor
-from models import psatjira_models, psatjira_models_names
+from models import psatitp_models, psatitp_models_names
 
 
-def psatjira_predictions_cfs_gefs():
+def psatitp_predictions_cfs_gefs():
     for model, name in zip(psatitp_models, psatitp_models_names):
-        predictor = NextDaysPrecipitationPredictor(model, "PSATJIRA")
+        predictor = NextDaysPrecipitationPredictor(model, "PSATITP")
         predictions = predictor.predict_next_x_days(15, True)
-        save_path = f"../prediction_results/PSATJIRA/{name}_cfs_gefs/"
+        save_path = f"../prediction_results/PSATITP/{name}_cfs_gefs/"
         if not os.path.isdir(save_path):
             os.makedirs(save_path)
         plt.plot(predictions.index, predictions)
@@ -27,11 +27,11 @@ def psatjira_predictions_cfs_gefs():
                 f.write(f"{prediction}\n")
 
 
-def psatjira_predictions_time():
+def psatitp_predictions_time():
     for model, name in zip(psatitp_models, psatitp_models_names):
-        predictor = NextDaysPrecipitationPredictor(model, "PSATJIRA")
+        predictor = NextDaysPrecipitationPredictor(model, "PSATITP")
         predictions = predictor.predict_next_x_days(15, False)
-        save_path = f"../prediction_results/PSATJIRA/{name}_time/"
+        save_path = f"../prediction_results/PSATITP/{name}_time/"
         if not os.path.isdir(save_path):
             os.makedirs(save_path)
         plt.plot(predictions.index, predictions)

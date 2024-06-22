@@ -1,12 +1,14 @@
+import numpy as np
+
 from data_import import get_dataset_only_time, get_dataset_with_cfs_gefs
 from split import split_train_test_by_size
 from models import psatitp_models, psatitp_models_names
 from precipitation_model_evaluator import PrecipitationEvaluator
 
 
-def psatjira_evaluation():
+def psatitp_evaluation():
     plant = "PSATJIRA"
-    root_path = "../evaluation_results/PSATJIRA/"
+    root_path = "../evaluation_results/PSATITP/"
 
     evaluators = []
     for model in psatitp_models:
@@ -14,6 +16,11 @@ def psatjira_evaluation():
 
     df = get_dataset_only_time(plant)
     X_train, X_test, y_train, y_test = split_train_test_by_size(df, 100)
+    mask = np.ones(X_train.shape[1], dtype=bool)
+    mask[30:45] = False
+    X_train = X_train.loc[:, mask]
+    X_test = X_test.loc[:, mask]
+
     for evaluator, name in zip(evaluators, psatitp_models_names):
         suffix = f"{name}_time/"
         save_path = root_path + suffix
@@ -30,4 +37,4 @@ def psatjira_evaluation():
 
 
 if __name__ == "__main__":
-    psatjira_evaluation()
+    psatitp_evaluation()
