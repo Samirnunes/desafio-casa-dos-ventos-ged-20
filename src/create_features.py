@@ -1,5 +1,6 @@
 import pandas as pd
 
+
 def create_new_features_by_df(df: pd.DataFrame):
     for i in range(1, 46):
         df[f'lag_{i}'] = df['mean_precipitation'].shift(i)
@@ -11,6 +12,7 @@ def create_new_features_by_df(df: pd.DataFrame):
     dummies.index = df.index
     df = pd.concat([df, dummies], axis=1)
     return df
+
 
 def create_new_features(ts_dict: dict):
     for key, df in ts_dict.items():

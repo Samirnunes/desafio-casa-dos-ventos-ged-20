@@ -12,6 +12,7 @@ def import_precipitation_ts():
         ts_dict[plant] = pd.read_csv(f"../data/ts-{plant}.csv", index_col=0)
     return ts_dict
 
+
 def get_dataset_only_time(plant="PSATJIRA"):
     ts_dict = import_precipitation_ts()
     return ts_dict[plant].dropna(axis=0)

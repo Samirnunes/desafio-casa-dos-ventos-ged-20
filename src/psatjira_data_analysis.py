@@ -1,5 +1,6 @@
-from data_import import *
-from data_analysis import *
+from data_import import import_precipitation_ts
+from data_analysis import precipitation_plots, is_stationary
+
 
 def psatjira_data_analysis():
     plant = "PSATJIRA"
@@ -7,4 +8,6 @@ def psatjira_data_analysis():
     precipitation_plots(ts_dict, plant)
     is_stationary(ts_dict, plant)
 
-psatjira_data_analysis()
+
+if __name__ == "__main__":
+    psatjira_data_analysis()
