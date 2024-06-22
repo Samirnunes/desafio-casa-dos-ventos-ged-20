@@ -20,8 +20,8 @@ def get_dataset_only_time(plant="PSATJIRA"):
 def get_dataset_with_cfs_gefs(plant="PSATJIRA"):
     df = get_dataset_only_time(plant)
     dfcg = df.copy()
-    c = pd.read_csv("../data/ts-PSATJIRA-cfs-model.csv", index_col=[0])
-    g = pd.read_csv("../data/ts-PSATJIRA-gefs-model.csv", index_col=[0])
+    c = pd.read_csv(f"../data/ts-{plant}-cfs-model.csv", index_col=[0])
+    g = pd.read_csv(f"../data/ts-{plant}-gefs-model.csv", index_col=[0])
     dfcg = pd.concat([dfcg, c], axis=1).dropna(axis=0)
     dfcg = pd.concat([dfcg, g], axis=1).dropna(axis=0)
     return dfcg
