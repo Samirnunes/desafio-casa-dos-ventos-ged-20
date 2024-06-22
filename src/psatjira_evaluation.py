@@ -2,7 +2,7 @@ from data_import import *
 from data_analysis import *
 from split import *
 from models import *
-from precipitation_model_evaluator import PrecipitationModelEvaluator
+from precipitation_model_evaluator import PrecipitationEvaluator
 
 def psatjira_evaluation():
     plant = "PSATJIRA"
@@ -10,7 +10,7 @@ def psatjira_evaluation():
     
     evaluators = []
     for model in psatjira_models:
-        evaluators.append(PrecipitationModelEvaluator(model))
+        evaluators.append(PrecipitationEvaluator(model))
     
     df = get_dataset_only_time(plant)
     X_train, X_test, y_train, y_test = split_train_test_by_size(df, 100)

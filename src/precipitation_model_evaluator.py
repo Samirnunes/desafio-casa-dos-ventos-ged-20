@@ -8,7 +8,7 @@ from precipitation_preprocessor import PrecipitationPreprocessor
 import json
 import os
 
-class PrecipitationModelEvaluator:
+class PrecipitationEvaluator:
     def __init__(self, model):
         self.__model = clone(model)
         

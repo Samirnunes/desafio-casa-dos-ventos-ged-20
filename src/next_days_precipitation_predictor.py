@@ -3,7 +3,7 @@ from data_import import *
 from create_features import create_new_features_by_df
 from sklearn.base import clone
 
-class NextDaysPredictor:
+class NextDaysPrecipitationPredictor:
     def __init__(self, model, plant="PSATJIRA"):
         self.__model = clone(model)
         self.__plant = plant
@@ -12,7 +12,7 @@ class NextDaysPredictor:
         df_train = get_dataset_only_time(self.__plant)
         X_train = df_train.drop(["mean_precipitation"], axis=1)
         y_train = df_train["mean_precipitation"]
-        model = self.__model
+        model = clone(self.__model)
         model.fit(X_train, y_train)
         df = self.__append_next_x_days(x)
         for i in range(x):

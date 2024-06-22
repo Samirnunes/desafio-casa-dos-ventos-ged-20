@@ -1,11 +1,11 @@
 import matplotlib.pyplot as plt
-from next_days_predictor import NextDaysPredictor
+from next_days_precipitation_predictor import NextDaysPrecipitationPredictor
 from models import *
 import os
 
 def psatjira_predictions_time():
     for model, name in zip(psatjira_models, psatjira_models_names):
-        predictor = NextDaysPredictor(model, "PSATJIRA")
+        predictor = NextDaysPrecipitationPredictor(model, "PSATJIRA")
         predictions = predictor.predict_next_x_days(15)
         save_path = f"./prediction_results/{name}_time/"
         if not os.path.isdir(save_path):
