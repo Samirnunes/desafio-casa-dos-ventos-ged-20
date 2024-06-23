@@ -52,6 +52,7 @@ def cross_validation(model, X, y):
              f"{sum(mae_val_list)/len(mae_val_list):0.2f}"],
         ]
     headers = ["", "Mean RMSE", "Mean MAE"]
+    print("Means:")
     print(tabulate(data, headers=headers, tablefmt="pretty"), end="\n\n")
 
     fig = plt.figure(figsize=(15, 9))

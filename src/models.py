@@ -13,9 +13,11 @@ psatjira_models_names = [
 ]
 
 psatitp_models = [
-    XGBRegressor(learning_rate=0.1, max_depth=3, subsample=0.8)
+    XGBRegressor(learning_rate=0.1, max_depth=3, subsample=0.8),
+    KNeighborsRegressor(n_neighbors=11, p=1)
 ]
 
 psatitp_models_names = [
-    "xgb_15d"
+    "xgb_15d",
+    "knn_15d_15d"
 ]

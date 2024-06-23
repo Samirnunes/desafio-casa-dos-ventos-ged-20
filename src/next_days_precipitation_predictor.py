@@ -1,4 +1,6 @@
 import pandas as pd
+import numpy as np
+
 from sklearn.base import clone
 
 from data_import import get_dataset_only_time, get_dataset_with_cfs_gefs
@@ -11,13 +13,23 @@ class NextDaysPrecipitationPredictor:
         self.__model = clone(model)
         self.__plant = plant
 
-    def predict_next_x_days(self, x=15, use_cfs_gefs=False):
+    def get_columns(self, use_cfs_gefs=False):
+        if use_cfs_gefs:
+            df_train = get_dataset_with_cfs_gefs(self.__plant)
+        else:
+            df_train = get_dataset_only_time(self.__plant)
+        return df_train.drop(["mean_precipitation"], axis=1).columns
+
+    def predict_next_x_days(self, x=15, use_cfs_gefs=False, mask=None):
         if use_cfs_gefs:
             df_train = get_dataset_with_cfs_gefs(self.__plant)
         else:
             df_train = get_dataset_only_time(self.__plant)
         X_train = df_train.drop(["mean_precipitation"], axis=1)
         y_train = df_train["mean_precipitation"]
+        if mask is not None:
+            X_train = X_train.loc[:, mask]
+
         preprocessor = PrecipitationPreprocessor()
         X_train = preprocessor.fit_transform(X_train)
         model = clone(self.__model)
@@ -27,6 +39,9 @@ class NextDaysPrecipitationPredictor:
         else:
             df = self.__append_next_x_days(x)
         df = df[df_train.columns]
+        if mask is not None:
+            mask = np.insert(mask, 0, True)
+            df = df.loc[:, mask]
         for i in range(x):
             df_next_x = df.tail(x)
             df_X = df_next_x.drop(["mean_precipitation"], axis=1).copy()
