@@ -13,13 +13,6 @@ class NextDaysPrecipitationPredictor:
         self.__model = clone(model)
         self.__plant = plant
 
-    def get_columns(self, use_cfs_gefs=False):
-        if use_cfs_gefs:
-            df_train = get_dataset_with_cfs_gefs(self.__plant)
-        else:
-            df_train = get_dataset_only_time(self.__plant)
-        return df_train.drop(["mean_precipitation"], axis=1).columns
-
     def predict_next_x_days(self, x=15, use_cfs_gefs=False, mask=None):
         if use_cfs_gefs:
             df_train = get_dataset_with_cfs_gefs(self.__plant)
@@ -79,3 +72,10 @@ class NextDaysPrecipitationPredictor:
         df_new = pd.concat([df, df_x_days], axis=0)
         df_new = create_new_features_by_df(df_new)
         return df_new
+
+    def get_columns(self, use_cfs_gefs=False):
+        if use_cfs_gefs:
+            df_train = get_dataset_with_cfs_gefs(self.__plant)
+        else:
+            df_train = get_dataset_only_time(self.__plant)
+        return df_train.drop(["mean_precipitation"], axis=1).columns
