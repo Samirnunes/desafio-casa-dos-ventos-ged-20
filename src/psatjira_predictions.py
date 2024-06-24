@@ -7,7 +7,7 @@ from models import psatjira_models, psatjira_models_names
 
 
 def psatjira_predictions_cfs_gefs():
-    for model, name in zip(psatitp_models, psatitp_models_names):
+    for model, name in zip(psatjira_models, psatjira_models_names):
         predictor = NextDaysPrecipitationPredictor(model, "PSATJIRA")
         predictions = predictor.predict_next_x_days(15, True)
         save_path = f"../prediction_results/PSATJIRA/{name}_cfs_gefs/"
@@ -23,12 +23,12 @@ def psatjira_predictions_cfs_gefs():
 
         with open(save_path + "predictions.txt", "w", encoding="utf-8") as f:
             f.write("Predictions for each day (15 days ahead)\n")
-            for prediction in zip(predictions.index, predictions):
+            for prediction in predictions:
                 f.write(f"{prediction}\n")
 
 
 def psatjira_predictions_time():
-    for model, name in zip(psatitp_models, psatitp_models_names):
+    for model, name in zip(psatjira_models, psatjira_models_names):
         predictor = NextDaysPrecipitationPredictor(model, "PSATJIRA")
         predictions = predictor.predict_next_x_days(15, False)
         save_path = f"../prediction_results/PSATJIRA/{name}_time/"
@@ -44,5 +44,9 @@ def psatjira_predictions_time():
 
         with open(save_path + "predictions.txt", "w", encoding="utf-8") as f:
             f.write("Predictions for each day (15 days ahead)\n")
-            for prediction in zip(predictions.index, predictions):
+            for prediction in predictions:
                 f.write(f"{prediction}\n")
+
+if __name__ == "__main__":
+    psatjira_predictions_time()
+    psatjira_predictions_cfs_gefs()

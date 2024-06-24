@@ -14,8 +14,6 @@ def cross_validation(model, X, y):
     tscv = TimeSeriesSplit(n_splits=10)
     rmse_val_list = []
     rmse_train_list = []
-    mae_val_list = []
-    mae_train_list = []
     eval_count = 0
     for train_index, val_index in tscv.split(X):
         print(f"Evaluation {eval_count}:")
@@ -31,13 +29,9 @@ def cross_validation(model, X, y):
         rmse_train = np.sqrt(mean_squared_error(y_train, model_.predict(X_train)))
         rmse_train_list.append(rmse_train)
 
-        mae_val = mean_absolute_error(y_val, y_pred)
-        mae_val_list.append(mae_val)
-        mae_train = mean_absolute_error(y_train, model_.predict(X_train))
-        mae_train_list.append(mae_train)
         data = [
-            ["Train", f"{len(train_index)}", f"{rmse_train:0.2f}", f"{mae_train:0.2f}"],
-            ["Validation", f"{len(val_index)}", f"{rmse_val:0.2f}", f"{mae_val:0.2f}"],
+            ["Train", f"{len(train_index)}", f"{rmse_train:0.2f}"],
+            ["Validation", f"{len(val_index)}", f"{rmse_val:0.2f}"],
         ]
         headers = ["", "Size", "RMSE", "MAE"]
         print(tabulate(data, headers=headers, tablefmt="pretty"), end="\n\n")
@@ -45,31 +39,24 @@ def cross_validation(model, X, y):
 
     data = [
             ["Train",
-             f"{sum(rmse_train_list)/len(rmse_train_list):0.2f}",
-             f"{sum(mae_train_list)/len(mae_train_list):0.2f}"],
+             f"{sum(rmse_train_list)/len(rmse_train_list):0.2f}"],
             ["Validation",
-             f"{sum(rmse_val_list)/len(rmse_val_list):0.2f}",
-             f"{sum(mae_val_list)/len(mae_val_list):0.2f}"],
+             f"{sum(rmse_val_list)/len(rmse_val_list):0.2f}"],
         ]
-    headers = ["", "Mean RMSE", "Mean MAE"]
+    headers = ["", "Mean RMSE"]
     print("Means:")
     print(tabulate(data, headers=headers, tablefmt="pretty"), end="\n\n")
 
     fig = plt.figure(figsize=(15, 9))
     gs = fig.add_gridspec(2, 2, height_ratios=[2, 3])
 
-    ax_hist1 = fig.add_subplot(gs[0, 0])
-    ax_hist2 = fig.add_subplot(gs[0, 1])
+    ax_hist1 = fig.add_subplot(gs[0, :])
     ax_line = fig.add_subplot(gs[1, :])
 
     ax_hist1.hist(rmse_val_list, color='skyblue', edgecolor='black')
     ax_hist1.set_title("RMSE histogram")
     ax_hist1.set_xlabel("RMSE")
     ax_hist1.set_ylabel("Count")
-    ax_hist2.hist(mae_val_list, color='salmon', edgecolor='black')
-    ax_hist2.set_title("MAE histogram")
-    ax_hist2.set_xlabel("MAE")
-    ax_hist2.set_ylabel("Count")
 
     ax_line.plot(y_val.index, y_val)
     ax_line.plot(y_pred.index, y_pred)

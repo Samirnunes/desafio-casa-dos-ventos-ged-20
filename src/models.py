@@ -19,5 +19,5 @@ psatitp_models = [
 
 psatitp_models_names = [
     "xgb_15d",
-    "knn_15d_15d"
+    "knn_15d"
 ]

@@ -28,7 +28,7 @@ def plot_plant_ts_accumulated_by_month(ts_dict, plant="PSATCNV", close=True):
     ts = ts_dict[plant]["mean_precipitation"]
     df = ts.copy()
     df.index = pd.to_datetime(df.index)
-    df = df.resample('ME').sum()
+    df = df.resample('M').sum()
     df.plot(color="darkblue", legend=False)
     plt.title(f"Precipitação média acumulada por mês para {plant}")
     plt.xlabel("Data de referência")
@@ -48,7 +48,7 @@ def plot_plant_ts_accumulated_by_year(ts_dict, plant="PSATCNV", close=True):
     df = ts.copy()
     df.index = pd.to_datetime(df.index)
     df = df[df.index < "2024-01-01"]
-    df = df.resample('YE').sum()
+    df = df.resample('Y').sum()
     df.plot(color="darkblue", legend=False)
     plt.title(f"Precipitação média acumulada por ano para {plant}")
     plt.xlabel("Data de referência")
@@ -68,7 +68,7 @@ def plot_plant_ts_mean_by_month(ts_dict, plant="PSATCNV", close=True):
     ts = ts_dict[plant]["mean_precipitation"]
     df = ts.copy()
     df.index = pd.to_datetime(df.index)
-    df = df.resample('ME').sum()
+    df = df.resample('M').sum()
     df = df.groupby(df.index.month).mean()
     plt.bar(df.index, df, color="darkblue")
     plt.xticks([i+1 for i in range(len(df.index))], list(df.index))
