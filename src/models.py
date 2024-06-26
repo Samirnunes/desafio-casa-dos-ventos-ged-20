@@ -21,3 +21,13 @@ psatitp_models_names = [
     "xgb_15d",
     "knn_15d"
 ]
+
+psatimbr_models = [
+    KNeighborsRegressor(n_neighbors=24),
+    RandomForestRegressor(n_estimators=200, max_depth=3, criterion="squared_error", random_state=0)
+]
+
+psatimbr_models_names = [
+    "24nn",
+    "random_forest"
+]
