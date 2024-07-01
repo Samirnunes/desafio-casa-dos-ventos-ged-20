@@ -59,12 +59,17 @@ class PrecipitationEvaluator:
         gs = fig.add_gridspec(2, 2, height_ratios=[2, 3])
 
         ax_hist1 = fig.add_subplot(gs[0, :])
+        # ax_hist2 = fig.add_subplot(gs[0, 1])
         ax_line = fig.add_subplot(gs[1, :])
 
         ax_hist1.hist(rmse_val_list, color='skyblue', edgecolor='black')
         ax_hist1.set_title("RMSE histogram")
         ax_hist1.set_xlabel("RMSE")
         ax_hist1.set_ylabel("Count")
+        # ax_hist2.hist(mae_val_list, color='salmon', edgecolor='black')
+        # ax_hist2.set_title("MAE histogram")
+        # ax_hist2.set_xlabel("MAE")
+        # ax_hist2.set_ylabel("Count")
 
         ax_line.plot(y_val.index, y_val)
         ax_line.plot(y_pred.index, y_pred)
